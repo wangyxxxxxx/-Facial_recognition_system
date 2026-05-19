@@ -1,0 +1,555 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>管理员授权页面 - HTML UI</title>
+  <link rel="stylesheet" href="style.css" />
+
+  <style>
+    .admin-main {
+      width: min(1180px, calc(100% - 40px));
+      margin: 0 auto;
+    }
+
+    .admin-hero {
+      padding-top: 46px;
+      padding-bottom: 28px;
+      display: grid;
+      gap: 22px;
+    }
+
+    .admin-title-row {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 24px;
+      flex-wrap: wrap;
+    }
+
+    .admin-title-row h1 {
+      margin: 0;
+    }
+
+    .admin-title-row p {
+      max-width: 780px;
+    }
+
+    .admin-status-strip {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .status-mini-card {
+      padding: 18px 20px;
+      border-radius: 24px;
+      background: rgba(255, 255, 255, 0.065);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+    }
+
+    .status-mini-card span {
+      display: block;
+      color: var(--muted);
+      font-size: 13px;
+      margin-bottom: 7px;
+    }
+
+    .status-mini-card strong {
+      display: block;
+      color: #fff;
+      font-size: 20px;
+      letter-spacing: -0.03em;
+      overflow-wrap: anywhere;
+    }
+
+    .admin-shell {
+      padding: 0;
+      overflow: hidden;
+    }
+
+    .admin-head {
+      padding: 26px 30px;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 20px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      background: rgba(255, 255, 255, 0.035);
+    }
+
+    .admin-head h2 {
+      margin: 0 0 8px;
+      font-size: 28px;
+      letter-spacing: -0.04em;
+    }
+
+    .admin-head p {
+      color: var(--muted);
+      line-height: 1.7;
+      margin: 0;
+    }
+
+    .admin-body {
+      padding: 28px 30px 32px;
+    }
+
+    .admin-content {
+      display: block;
+    }
+
+    .admin-content-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 22px;
+    }
+
+    .admin-card-block {
+      border-radius: 28px;
+      padding: 24px;
+      background: rgba(255, 255, 255, 0.055);
+      border: 1px solid rgba(255, 255, 255, 0.115);
+    }
+
+    .block-head {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 18px;
+      margin-bottom: 22px;
+    }
+
+    .block-title {
+      display: flex;
+      gap: 14px;
+      align-items: flex-start;
+    }
+
+    .block-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 18px;
+      display: grid;
+      place-items: center;
+      color: #dff5ff;
+      font-size: 20px;
+      font-weight: 950;
+      background: rgba(92, 200, 255, 0.14);
+      border: 1px solid rgba(92, 200, 255, 0.25);
+      flex: 0 0 auto;
+    }
+
+    .block-title h3 {
+      margin: 0 0 8px;
+      font-size: 24px;
+      letter-spacing: -0.04em;
+    }
+
+    .block-title p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.65;
+      font-size: 14px;
+    }
+
+    .block-badge {
+      padding: 8px 12px;
+      border-radius: 999px;
+      color: #d6f2ff;
+      background: rgba(92, 200, 255, 0.11);
+      border: 1px solid rgba(92, 200, 255, 0.24);
+      font-size: 12px;
+      font-weight: 900;
+      white-space: nowrap;
+    }
+
+    .config-grid {
+      display: grid;
+      grid-template-columns: 1.2fr 1fr 1fr;
+      gap: 16px;
+    }
+
+    .config-field {
+      display: grid;
+      gap: 9px;
+    }
+
+    .config-field label,
+    .pretty-input-label {
+      color: #edf5ff;
+      font-size: 14px;
+      font-weight: 900;
+    }
+
+    .config-field select,
+    .config-field input,
+    .pretty-input-label input {
+      width: 100%;
+      min-height: 50px;
+      padding: 0 15px;
+      border-radius: 17px;
+      color: var(--text);
+      background: rgba(3, 8, 18, 0.56);
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      outline: none;
+      font-size: 15px;
+      box-sizing: border-box;
+    }
+
+    .config-field select:focus,
+    .config-field input:focus,
+    .pretty-input-label input:focus {
+      border-color: rgba(92, 200, 255, 0.6);
+      box-shadow: 0 0 0 4px rgba(92, 200, 255, 0.1);
+    }
+
+    .field-note {
+      min-height: 36px;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.5;
+    }
+
+    .config-save-row {
+      margin-top: 22px;
+      padding-top: 20px;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+    }
+
+    .config-save-row p {
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.6;
+      margin: 0;
+    }
+
+    .config-save-row .button {
+      min-width: 180px;
+    }
+
+    .manage-grid {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 22px;
+    }
+
+    .manage-card {
+      min-height: 100%;
+    }
+
+    .danger-card {
+      background: linear-gradient(180deg, rgba(255, 92, 122, 0.075), rgba(255, 255, 255, 0.045));
+      border-color: rgba(255, 92, 122, 0.2);
+    }
+
+    .enroll-grid {
+      display: grid;
+      grid-template-columns: 1fr 180px;
+      gap: 16px;
+      align-items: end;
+      margin-bottom: 18px;
+    }
+
+    .pretty-input-label {
+      display: grid;
+      gap: 9px;
+    }
+
+    .check-box-line {
+      min-height: 50px;
+      padding: 0 15px;
+      border-radius: 17px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: #edf5ff;
+      font-weight: 850;
+      background: rgba(3, 8, 18, 0.38);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+    }
+
+    .delete-actions {
+      margin-top: 18px;
+    }
+
+    .result-wide {
+      margin-top: 24px;
+      margin-bottom: 50px;
+    }
+
+    @media (max-width: 1100px) {
+      .config-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .manage-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 720px) {
+      .admin-main {
+        width: min(100% - 24px, 1180px);
+      }
+
+      .admin-status-strip,
+      .config-grid,
+      .enroll-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .admin-head,
+      .admin-body {
+        padding-left: 20px;
+        padding-right: 20px;
+      }
+
+      .config-save-row {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .config-save-row .button {
+        width: 100%;
+      }
+
+      .block-head {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+
+<body data-page="admin">
+  <nav class="top-nav">
+    <div class="container nav-inner">
+      <a href="index.html" class="brand">
+        <span class="brand-logo" aria-hidden="true"></span>
+        <span>
+          <strong>ArcFace Secure Lab</strong>
+          <em>管理员授权 · 用户录入 · 系统配置</em>
+        </span>
+      </a>
+
+      <div class="nav-links">
+        <a href="index.html">返回识别页面</a>
+      </div>
+
+      <div class="status-pill">
+        <span class="dot" id="apiDot"></span>
+        <span id="apiStatus">正在检测...</span>
+      </div>
+    </div>
+  </nav>
+
+  <main class="page">
+    <section class="admin-main admin-hero">
+      <div class="admin-title-row">
+        <div class="hero-copy">
+          <div class="eyebrow"><span class="pulse-dot"></span> Admin Control Page</div>
+          <h1>管理员<span>授权页面</span></h1>
+          <p>
+            当前页面只在管理员人脸验证通过后进入。这里可以进行系统图库模式设置、阈值设置、用户录入和用户删除。
+          </p>
+        </div>
+
+        <div class="hero-actions">
+          <a href="index.html" class="button secondary link-btn">返回识别页面</a>
+          <button id="logoutAdminBtn" class="button danger" type="button">退出管理员</button>
+        </div>
+      </div>
+
+      <div class="admin-status-strip">
+        <div class="status-mini-card">
+          <span>Admin Session</span>
+          <strong id="adminSessionStatus">CHECKING</strong>
+        </div>
+        <div class="status-mini-card">
+          <span>Permission</span>
+          <strong id="adminPermissionMini">Admin</strong>
+        </div>
+        <div class="status-mini-card">
+          <span>Runtime</span>
+          <strong id="adminRuntimeMini">Auto</strong>
+        </div>
+      </div>
+    </section>
+
+    <section class="admin-main">
+      <section class="glass-card admin-card locked admin-shell" id="adminPanel">
+        <div class="admin-head">
+          <div>
+            <h2>管理员操作台</h2>
+            <p>只有管理员 token 有效时，才允许录入、删除和保存系统图库模式与阈值。</p>
+          </div>
+          <span class="tag" id="adminTag">未授权</span>
+        </div>
+
+        <div class="admin-body">
+          <div class="notice" id="adminNotice">
+            正在检查管理员授权状态...
+          </div>
+
+          <div class="admin-content" id="adminContent">
+            <div class="admin-content-grid">
+              <div class="admin-card-block">
+                <div class="block-head">
+                  <div class="block-title">
+                    <div class="block-icon">⚙</div>
+                    <div>
+                      <h3>系统运行配置</h3>
+                      <p>
+                        后端只保留一个系统图库模式，身份识别、/both 识别阶段、/score 和 /score_batch 都统一使用该图库。
+                      </p>
+                    </div>
+                  </div>
+                  <span class="block-badge">单一 gallery_mode</span>
+                </div>
+
+                <div class="config-grid">
+                  <div class="config-field">
+                    <label for="systemGalleryMode">系统图库模式</label>
+                    <select id="systemGalleryMode">
+                      <option value="protected">protected 加水印图库</option>
+                      <option value="clean">clean 无水印图库</option>
+                    </select>
+                    <span class="field-note">统一控制身份识别、水印检测识别阶段、/score 和 /score_batch。</span>
+                  </div>
+
+                  <div class="config-field">
+                    <label for="apiThreshold">API 验证阈值</label>
+                    <input id="apiThreshold" type="number" step="0.001" min="-1" max="1" value="0.30" placeholder="默认 0.30" />
+                    <span class="field-note">用于 /score 和 /score_batch 的通过判断。</span>
+                  </div>
+
+                  <div class="config-field">
+                    <label for="watermarkThreshold">水印检测阈值</label>
+                    <input id="watermarkThreshold" type="number" step="0.001" min="-1" max="1" value="0.085" placeholder="默认 0.085" />
+                    <span class="field-note">用于 /detect_watermark 和 /both 的水印判定。</span>
+                  </div>
+                </div>
+
+                <div class="config-save-row">
+                  <p>
+                    保存后会立即影响后端接口。普通用户不能在主页面绕过这些管理员配置。
+                  </p>
+                  <button id="saveModeBtn" class="button primary" type="button">保存配置</button>
+                </div>
+              </div>
+
+              <div class="manage-grid">
+                <div class="admin-card-block manage-card">
+                  <div class="block-head">
+                    <div class="block-title">
+                      <div class="block-icon">＋</div>
+                      <div>
+                        <h3>录入用户</h3>
+                        <p>录入固定写入 clean gallery，然后由后端自动生成 protected gallery 与 watermark key。</p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="enroll-grid">
+                    <label class="pretty-input-label">
+                      身份编号 label
+                      <input id="enrollLabel" type="text" placeholder="例如：201" />
+                    </label>
+
+                    <label class="check-box-line">
+                      <input id="overwriteEnroll" type="checkbox" />
+                      覆盖已有身份
+                    </label>
+                  </div>
+
+                  <div class="preview small" id="enrollPreview">
+                    <span>未选择录入图片</span>
+                  </div>
+
+                  <div class="path" id="enrollFileName">录入图片：未选择</div>
+
+                  <div class="actions two">
+                    <label class="button secondary">
+                      选择录入图片
+                      <input id="enrollFileInput" type="file" accept="image/*" hidden />
+                    </label>
+                    <button id="enrollCameraBtn" class="button secondary" type="button">摄像头采集录入图</button>
+                  </div>
+
+                  <button id="enrollBtn" class="button primary full" type="button">确认录入</button>
+                </div>
+
+                <div class="admin-card-block manage-card danger-card">
+                  <div class="block-head">
+                    <div class="block-title">
+                      <div class="block-icon">−</div>
+                      <div>
+                        <h3>删除用户</h3>
+                        <p>删除时从 clean gallery 删除该 label，并由后端自动重新生成 protected gallery 与 watermark key。</p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <label class="pretty-input-label">
+                    要删除的身份编号 label
+                    <input id="deleteLabel" type="text" placeholder="例如：201" />
+                  </label>
+
+                  <div class="delete-actions">
+                    <button id="deleteBtn" class="button danger full" type="button">确认删除</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </section>
+
+    <section class="admin-main result-wide">
+      <section class="glass-card result-card">
+        <div class="card-title">
+          <div>
+            <h2>管理员操作结果</h2>
+            <p>图库模式设置、阈值设置、录入和删除的后端返回内容会在这里展示。</p>
+          </div>
+          <span class="tag">JSON</span>
+        </div>
+        <pre class="json" id="rawResult">等待操作...</pre>
+      </section>
+    </section>
+  </main>
+
+  <div class="toast" id="toast"></div>
+
+  <div class="camera-modal hidden" id="cameraModal">
+    <div class="camera-card">
+      <div class="camera-head">
+        <h3 id="cameraTitle">摄像头采集</h3>
+        <button id="closeCameraBtn" class="icon-btn" type="button">×</button>
+      </div>
+
+      <div class="video-wrap">
+        <video id="cameraVideo" autoplay playsinline></video>
+        <div class="face-guide"></div>
+        <div class="cross-line h"></div>
+        <div class="cross-line v"></div>
+      </div>
+
+      <p class="hint center">请把人脸保持在绿色轮廓框内，正对摄像头。</p>
+
+      <div class="actions two">
+        <button id="captureBtn" class="button primary" type="button">采集当前画面</button>
+        <button id="cancelCameraBtn" class="button secondary" type="button">取消</button>
+      </div>
+
+      <canvas id="cameraCanvas" hidden></canvas>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
