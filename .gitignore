@@ -4,3 +4,6 @@ api_logs/
 certs/*.pem
 weights/
 *.pt
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
