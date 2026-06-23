@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>管理员人脸验证 - HTML UI</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body data-page="admin-login">
+  <nav class="top-nav">
+    <div class="container nav-inner">
+      <a href="index.html" class="brand">
+        <span class="brand-logo" aria-hidden="true"></span>
+        <span>
+          <strong>ArcFace Secure Lab</strong>
+          <em>管理员人脸验证</em>
+        </span>
+      </a>
+
+      <div class="nav-links">
+        <a href="index.html">返回识别页面</a>
+      </div>
+
+      <div class="status-pill">
+        <span class="dot" id="apiDot"></span>
+        <span id="apiStatus">正在检测...</span>
+      </div>
+    </div>
+  </nav>
+
+  <main class="page">
+    <section class="hero container">
+      <div class="hero-copy">
+        <div class="eyebrow"><span class="pulse-dot"></span> Admin Face Login</div>
+        <h1>管理员<span>人脸验证</span></h1>
+        <p>
+          管理员入口已从主识别页面中独立出来。请在本页面选择或采集管理员人脸图片，验证通过后进入管理员操作台。
+        </p>
+
+        <div class="hero-actions">
+          <a href="index.html" class="button secondary link-btn">返回识别页面</a>
+        </div>
+      </div>
+
+      <div class="hero-visual" aria-hidden="true">
+        <div class="scan-card">
+          <div class="scan-head">
+            <span>Admin Verification</span>
+            <strong>LOCKED</strong>
+          </div>
+
+          <div class="face-orb">
+            <div class="scan-line"></div>
+            <div class="face-icon"><span></span></div>
+          </div>
+
+          <div class="mini-grid">
+            <div><small>Permission</small><b>Required</b></div>
+            <div><small>Token</small><b>Session</b></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="container workbench">
+      <section class="glass-card input-card">
+        <div class="card-title">
+          <div>
+            <h2>管理员人脸输入</h2>
+            <p>输入管理员 ID，并选择管理员人脸图片或使用摄像头采集。</p>
+          </div>
+          <span class="tag">Admin Login</span>
+        </div>
+
+        <div class="preview" id="adminLoginPreview">
+          <span>未选择管理员人脸图片</span>
+        </div>
+
+        <div class="path" id="adminLoginFileName">图片来源：未选择</div>
+
+        <div class="form-grid" style="grid-template-columns: 1fr; margin: 18px 0;">
+          <div>
+            <label for="adminLoginId">管理员 ID</label>
+            <input id="adminLoginId" type="text" placeholder="请输入管理员身份编号，例如 1" autocomplete="off" />
+          </div>
+        </div>
+
+        <div class="actions two">
+          <label class="button secondary">
+            选择图片
+            <input id="adminLoginFileInput" type="file" accept="image/*" hidden />
+          </label>
+
+          <button id="adminLoginCameraBtn" class="button secondary" type="button">摄像头采集</button>
+        </div>
+
+        <button id="adminLoginBtn" class="button danger full" type="button">验证并进入管理员页面</button>
+      </section>
+
+      <section class="glass-card result-card">
+        <div class="card-title">
+          <div>
+            <h2>验证结果</h2>
+            <p>管理员 ID、人脸识别匹配和无水印检测结果会在这里展示。</p>
+          </div>
+          <span class="tag">Result</span>
+        </div>
+
+        <div class="result-box gray">
+          <div class="label">管理员验证状态</div>
+          <div class="value" id="adminLoginResult">未验证</div>
+        </div>
+
+        <pre class="json" id="rawResult">等待操作...</pre>
+      </section>
+    </section>
+  </main>
+
+  <div class="toast" id="toast"></div>
+
+  <div class="camera-modal hidden" id="cameraModal">
+    <div class="camera-card">
+      <div class="camera-head">
+        <h3 id="cameraTitle">摄像头采集</h3>
+        <button id="closeCameraBtn" class="icon-btn" type="button">×</button>
+      </div>
+
+      <div class="video-wrap">
+        <video id="cameraVideo" autoplay playsinline></video>
+        <div class="face-guide"></div>
+        <div class="cross-line h"></div>
+        <div class="cross-line v"></div>
+      </div>
+
+      <p class="hint center">请把人脸保持在绿色轮廓框内，正对摄像头。</p>
+
+      <div class="actions two">
+        <button id="captureBtn" class="button primary" type="button">采集当前画面</button>
+        <button id="cancelCameraBtn" class="button secondary" type="button">取消</button>
+      </div>
+
+      <canvas id="cameraCanvas" hidden></canvas>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

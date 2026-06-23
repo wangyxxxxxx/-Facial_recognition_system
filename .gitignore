@@ -1,0 +1,6 @@
+.idea/
+.ipynb_checkpoints/
+api_logs/
+certs/*.pem
+weights/
+*.pt

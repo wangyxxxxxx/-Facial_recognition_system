@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>人脸识别系统 - HTML UI</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body data-page="main">
+  <nav class="top-nav">
+    <div class="container nav-inner">
+      <a href="#top" class="brand">
+        <span class="brand-logo" aria-hidden="true"></span>
+        <span>
+          <strong>ArcFace Secure Lab</strong>
+          <em>人脸识别</em>
+        </span>
+      </a>
+
+      <div class="nav-links">
+        <a href="#recognition">识别检测</a>
+      </div>
+
+      <div class="status-pill">
+        <span class="dot" id="apiDot"></span>
+        <span id="apiStatus">正在检测...</span>
+      </div>
+    </div>
+  </nav>
+
+  <main id="top" class="page">
+    <section class="hero container">
+      <div class="hero-copy">
+        <div class="eyebrow"><span class="pulse-dot"></span> Local HTML Control Panel</div>
+        <h1>人脸识别<span>系统</span></h1>
+        <p>
+          这是与 PyQt5 完全独立的 HTML 操作界面。当前主页面会同时调用统一 /face 接口完成身份识别，并调用水印检测接口完成确权。
+        </p>
+
+        <div class="hero-actions">
+          <a href="#recognition" class="button primary link-btn">开始检测</a>
+        </div>
+      </div>
+
+      <div class="hero-visual" aria-hidden="true">
+        <div class="scan-card">
+          <div class="scan-head">
+            <span>Face Embedding Scan</span>
+            <strong>ONLINE</strong>
+          </div>
+
+          <div class="face-orb">
+            <div class="scan-line"></div>
+            <div class="face-icon"><span></span></div>
+          </div>
+
+          <div class="mini-grid">
+            <div><small>Gallery</small><b>Auto</b></div>
+            <div><small>Watermark</small><b>Ready</b></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="recognition" class="container workbench">
+      <section class="glass-card input-card">
+        <div class="card-title">
+          <div>
+            <h2>输入图片</h2>
+            <p>选择或采集一张图片后，系统会自动调用 /face 完成身份识别，并调用水印检测接口完成确权。</p>
+          </div>
+          <span class="tag">Input</span>
+        </div>
+
+        <div class="preview" id="mainPreview">
+          <span>未选择图片</span>
+        </div>
+
+        <div class="actions two upload-actions">
+          <label class="button secondary">
+            选择图片
+            <input id="mainFileInput" type="file" accept="image/*" hidden />
+          </label>
+
+          <button id="mainCameraBtn" class="button secondary" type="button">摄像头采集</button>
+        </div>
+
+        <div class="path" id="mainFileName">图片来源：未选择</div>
+
+        <div class="actions detect-actions">
+          <button id="bothBtn" class="button primary full" type="button">身份识别 + 水印检测</button>
+        </div>
+      </section>
+
+      <section class="glass-card result-card">
+        <div class="card-title">
+          <div>
+            <h2>检测结果</h2>
+            <p>身份识别和水印检测结果会在这里展示。</p>
+          </div>
+          <span class="tag">Result</span>
+        </div>
+
+        <div class="result-box blue">
+          <div class="label">身份识别结果</div>
+          <div class="value" id="identityResult">未检测</div>
+        </div>
+
+        <div class="result-box gray" id="wmBox">
+          <div class="label">水印检测状态</div>
+          <div class="value" id="watermarkResult">未检测</div>
+        </div>
+
+        <pre class="json" id="rawResult">等待操作...</pre>
+      </section>
+    </section>
+  </main>
+
+  <div class="toast" id="toast"></div>
+
+  <div class="camera-modal hidden" id="cameraModal">
+    <div class="camera-card">
+      <div class="camera-head">
+        <h3 id="cameraTitle">摄像头采集</h3>
+        <button id="closeCameraBtn" class="icon-btn" type="button">×</button>
+      </div>
+
+      <div class="video-wrap">
+        <video id="cameraVideo" autoplay playsinline></video>
+        <div class="face-guide"></div>
+        <div class="cross-line h"></div>
+        <div class="cross-line v"></div>
+      </div>
+
+      <p class="hint center">请把人脸保持在绿色轮廓框内，正对摄像头。</p>
+
+      <div class="actions two">
+        <button id="captureBtn" class="button primary" type="button">采集当前画面</button>
+        <button id="cancelCameraBtn" class="button secondary" type="button">取消</button>
+      </div>
+
+      <canvas id="cameraCanvas" hidden></canvas>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
